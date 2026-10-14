@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Junior eFootball Market</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 22px 15px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .brand {
+            padding: 5px 12px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            margin-bottom: 18px;
+        }
+
+        .brand h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #9ca3af;
+            padding: 0 12px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav a,
+        .nav button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+
+        .nav a:hover,
+        .nav button:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav a.active {
+            background: #4a76a8;
+            color: white;
+        }
+
+        .logout-link {
+            margin-top: 18px;
+            border-top: 1px solid rgba(255,255,255,0.12) !important;
+            padding-top: 18px !important;
+            color: #fca5a5 !important;
+        }
+
+        .logout-link:hover {
+            background: #7f1d1d !important;
+            color: white !important;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .topbar h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .topbar p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .user-badge {
+            background: #eef4fb;
+            color: #365f8c;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1150px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        #username {
+            color: #4a76a8;
+        }
+
+        /* =========================
+           DASHBOARD CARDS
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.10);
+        }
+
+        .dashboard-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #4a76a8;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #365f8c;
+        }
+
+        .green {
+            background: #28a745;
+        }
+
+        .green:hover {
+            background: #218838;
+        }
+
+        .orange {
+            background: #f59e0b;
+        }
+
+        .orange:hover {
+            background: #d97706;
+        }
+
+        .rules {
+            margin-top: 25px;
+            background: #fff3cd;
+            color: #856404;
+            padding: 18px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 950px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .nav {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .logout-link {
+                margin-top: 5px;
+                border-top: none !important;
+                padding-top: 12px !important;
+            }
+
+            .topbar {
+                padding: 18px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .container {
+                width: 94%;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                grid-template-columns: 1fr;
+            }
+
+            .brand {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <h2>⚽ Junior eFootball</h2>
+        <p>Market</p>
+    </div>
+
+    <div class="nav-title">
+        Main Menu
+    </div>
+
+    <nav class="nav">
+
+        <button type="button" class="active" data-section="dashboard"
+            onclick="showSection('dashboard')">
+            🏠 Dashboard
+        </button>
+
+        <button type="button" data-section="marketplace"
+            onclick="showSection('marketplace')">
+            🛒 Marketplace
+        </button>
+
+        <button type="button" data-section="post-ad"
+            onclick="showSection('post-ad')">
+            📢 Post Advertisement
+        </button>
+
+        <button type="button" data-section="credits"
+            onclick="showSection('credits')">
+            💰 Advertising Credits
+        </button>
+
+        <button type="button" data-section="messages"
+            onclick="showSection('messages')">
+            💬 Messages
+        </button>
+
+        <button type="button" data-section="announcements"
+            onclick="showSection('announcements')">
+            📢 Announcements
+        </button>
+
+        <button type="button" data-section="notifications"
+            onclick="showSection('notifications')">
+            🔔 Notifications
+        </button>
+
+        <button type="button" data-section="reviews"
+            onclick="showSection('reviews')">
+            ⭐ Reviews
+        </button>
+
+        <button type="button" data-section="profile"
+            onclick="showSection('profile')">
+            👤 My Profile
+        </button>
+
+        <button type="button" data-section="rules"
+            onclick="showSection('rules')">
+            📋 Marketplace Rules
+        </button>
+
+        <button
+            type="button"
+            class="logout-link"
+            id="sidebarLogoutButton"
+        >
+            🚪 Log Out
+        </button>
+
+    </nav>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <div class="topbar">
+
+        <div>
+            <h1 id="pageTitle">Dashboard</h1>
+            <p id="pageSubtitle">Manage your Junior eFootball Market account.</p>
+        </div>
+
+        <div class="user-badge">
+            👤 <span id="topUsername">User</span>
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        <div id="loading" class="loading">
+            Loading your account...
+        </div>
+
+        <div id="dashboardContent" style="display:none;">
+
+            <!-- DASHBOARD SECTION -->
+            <section id="section-dashboard" class="dashboard-section">
+
+                <div class="welcome">
+
+                    <h2>
+                        Welcome, <span id="username">User</span>! 👋
+                    </h2>
+
+                    <p>
+                        Manage your marketplace activities from your dashboard.
+                    </p>
+
+                </div>
+
+                <div class="dashboard-grid">
+
+                    <div class="dashboard-card">
+                        <h3>🛒 Marketplace</h3>
+                        <p>Browse eFootball advertisements posted by the community.</p>
+                        <button class="btn" onclick="showSection('marketplace')">
+                            Open Marketplace
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>📢 Post Advertisement</h3>
+                        <p>Create and publish your eFootball marketplace advertisement.</p>
+                        <button class="btn green" onclick="showSection('post-ad')">
+                            Post Advertisement
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>💰 Advertising Credits</h3>
+                        <p>Buy advertising credits manually and use them to publish your advertisements.</p>
+                        <button class="btn orange" onclick="showSection('credits')">
+                            Manage Credits
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>💬 Messages</h3>
+                        <p>Chat privately with other marketplace users.</p>
+                        <button class="btn" onclick="showSection('messages')">
+                            Open Messages
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>👤 My Profile</h3>
+                        <p>View and manage your marketplace profile.</p>
+                        <button class="btn" onclick="showSection('profile')">
+                            View Profile
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>⭐ Reviews</h3>
+                        <p>View your seller ratings and marketplace reviews.</p>
+                        <button class="btn" onclick="showSection('reviews')">
+                            View Reviews
+                        </button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>📋 Marketplace Rules</h3>
+                        <p>Read the rules and safety guidelines for using the market.</p>
+                        <button class="btn" onclick="showSection('rules')">
+                            View Rules
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MARKETPLACE SECTION -->
+            <section id="section-marketplace" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>🛒 Marketplace</h2>
+                    <p>Browse eFootball advertisements posted by the community.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>Marketplace</h3>
+
+                    <p>
+                        Browse available eFootball accounts and advertisements.
+                    </p>
+
+                    <a href="/marketplace.html" class="btn">
+                        Open Marketplace
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- POST AD SECTION -->
+            <section id="section-post-ad" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>📢 Post Advertisement</h2>
+                    <p>Create and publish your eFootball marketplace advertisement.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>Create Advertisement</h3>
+
+                    <p>
+                        Before publishing an advertisement, make sure you have
+                        enough advertising credits.
+                    </p>
+
+                    <a href="/post-ad.html" class="btn green">
+                        Continue to Post Advertisement
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- CREDITS SECTION -->
+            <section id="section-credits" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>💰 Advertising Credits</h2>
+                    <p>Buy credits before publishing your eFootball account advertisement.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>💳 Your Credit Balance</h3>
+
+                    <div id="advertisingCreditBalance"
+                         style="font-size:32px;font-weight:700;margin:15px 0;">
+                        0 credits
+                    </div>
+
+                    <p>
+                        1 credit = 1 advertisement publication.
+                    </p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>📦 Choose an Advertising Package</h3>
+
+                    <div id="advertisingPackages"
+                         style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-top:20px;">
+                        <p>Loading packages...</p>
+                    </div>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>📱 M-Pesa Payment</h3>
+
+                    <p>
+                        Send the exact package amount to:
+                    </p>
+
+                    <div style="background:#f5f5f5;padding:15px;border-radius:10px;margin:15px 0;">
+                        <p><strong>M-Pesa Number:</strong> 0745869096</p>
+                        <p><strong>Name:</strong> Sahafi Hassan Haji</p>
+                    </div>
+
+                    <p>
+                        After sending the payment, enter your M-Pesa transaction code below.
+                        Your credits will be added after admin verification.
+                    </p>
+
+                    <label for="advertisingFullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="advertisingFullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        style="width:100%;padding:12px;margin:8px 0 15px;border-radius:8px;box-sizing:border-box;"
+                    >
+
+                    <label for="advertisingWhatsapp">
+                        WhatsApp Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="advertisingWhatsapp"
+                        placeholder="Example: 0712345678"
+                        autocomplete="tel"
+                        style="width:100%;padding:12px;margin:8px 0 15px;border-radius:8px;box-sizing:border-box;"
+                    >
+
+                    <label for="advertisingEmail">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="advertisingEmail"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        style="width:100%;padding:12px;margin:8px 0 15px;border-radius:8px;box-sizing:border-box;"
+                    >
+
+                    <label for="advertisingPackageSelect">
+                        Select Package
+                    </label>
+
+                    <select id="advertisingPackageSelect"
+                            style="width:100%;padding:12px;margin:8px 0 15px;border-radius:8px;">
+                        <option value="">Choose a package</option>
+                    </select>
+
+                    <label for="advertisingTransactionCode">
+                        M-Pesa Transaction Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="advertisingTransactionCode"
+                        placeholder="Example: ABC123XYZ"
+                        autocomplete="off"
+                        style="width:100%;padding:12px;margin:8px 0 15px;border-radius:8px;box-sizing:border-box;"
+                    >
+
+                    <label for="advertisingScreenshot">
+                        Payment Screenshot
+                    </label>
+
+                    <input
+                        type="file"
+                        id="advertisingScreenshot"
+                        accept="image/*"
+                        style="width:100%;padding:12px;margin:8px 0 15px;box-sizing:border-box;"
+                    >
+
+                    <p style="font-size:13px;margin-top:-5px;margin-bottom:15px;">
+                        Upload a clear screenshot showing your M-Pesa payment.
+                    </p>
+
+                    <button
+                        class="btn orange"
+                        type="button"
+                        onclick="submitAdvertisingPayment()">
+                        Submit Payment for Verification
+                    </button>
+
+                    <p id="advertisingPaymentMessage"
+                       style="margin-top:15px;"></p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>🧾 Payment History</h3>
+
+                    <div id="advertisingPaymentHistory">
+                        Loading payment history...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MESSAGES SECTION -->
+            <section id="section-messages" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>💬 Messages</h2>
+                    <p>Chat privately with other marketplace users.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>Private Messages</h3>
+
+                    <p>
+                        Open your marketplace conversations.
+                    </p>
+
+                    <a href="/chat.html" class="btn">
+                        Open Messages
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- ANNOUNCEMENTS SECTION -->
+            <section id="section-announcements" class="dashboard-section" style="display:none;">
+                <div class="welcome">
+                    <h2>📢 Announcements</h2>
+                    <p>Updates and important messages from Junior eFootball Market.</p>
+                </div>
+                <div class="dashboard-card">
+                    <div id="announcementsList">Loading announcements...</div>
+                    <button class="btn" type="button" style="margin-top:15px;"
+                        onclick="loadAnnouncements()">Refresh Announcements</button>
+                </div>
+            </section>
+
+            <!-- NOTIFICATIONS SECTION -->
+            <section id="section-notifications" class="dashboard-section" style="display:none;">
+                <div class="welcome">
+                    <h2>🔔 Notifications</h2>
+                    <p>Check for important updates and announcements.</p>
+                </div>
+                <div class="dashboard-card">
+                    <div id="notificationsList">Loading notifications...</div>
+                    <button class="btn" type="button" style="margin-top:15px;"
+                        onclick="loadNotifications()">Refresh Notifications</button>
+                </div>
+            </section>
+
+            <!-- PROFILE SECTION -->
+            <section id="section-profile" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>👤 My Profile</h2>
+                    <p>View and manage your marketplace profile.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>Your Profile</h3>
+
+                    <p>
+                        Manage your marketplace account profile.
+                    </p>
+
+                    <a href="/profile.html" class="btn">
+                        Open Profile
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- REVIEWS SECTION -->
+            <section id="section-reviews" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>⭐ Reviews</h2>
+                    <p>View your seller ratings and marketplace reviews.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>Seller Reviews</h3>
+
+                    <p>
+                        View reviews and ratings received from marketplace users.
+                    </p>
+
+                    <a href="/reviews.html" class="btn">
+                        Open Reviews
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- RULES SECTION -->
+            <section id="section-rules" class="dashboard-section" style="display:none;">
+
+                <div class="welcome">
+                    <h2>📋 Marketplace Rules</h2>
+                    <p>Read the rules and safety guidelines.</p>
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>Safety & Marketplace Rules</h3>
+
+                    <p>
+                        Never share or request eFootball/Konami passwords,
+                        M-Pesa PINs, OTPs, email passwords, or other private
+                        credentials.
+                    </p>
+
+                    <p>
+                        Report suspicious advertisements or users.
+                    </p>
+
+                    <a href="/rules.html" class="btn">
+                        Open Full Rules
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <div class="rules">
+
+                <strong>🛡️ Safety Reminder</strong>
+
+                <br><br>
+
+                Never share or request eFootball/Konami passwords,
+                M-Pesa PINs, OTPs, email passwords, or other private credentials.
+                Report suspicious advertisements or users.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    function showSection(section) {
+
+        const sections = document.querySelectorAll(".dashboard-section");
+
+        sections.forEach((item) => {
+            item.style.display = "none";
+        });
+
+        const selected = document.getElementById("section-" + section);
+
+        if (selected) {
+            selected.style.display = "block";
+        }
+
+        const buttons = document.querySelectorAll(".nav button[data-section]");
+
+        buttons.forEach((button) => {
+            button.classList.remove("active");
+        });
+
+        const activeButton = document.querySelector(
+            '.nav button[data-section="' + section + '"]'
+        );
+
+        if (activeButton) {
+            activeButton.classList.add("active");
+        }
+
+        const titles = {
+            dashboard: ["Dashboard", "Manage your Junior eFootball Market account."],
+            marketplace: ["Marketplace", "Browse eFootball advertisements posted by the community."],
+            "post-ad": ["Post Advertisement", "Create and publish your eFootball marketplace advertisement."],
+            credits: ["Advertising Credits", "Manage your advertising credits."],
+            messages: ["Messages", "Chat privately with other marketplace users."],
+            announcements: ["Announcements", "Read updates from Junior eFootball Market."],
+            notifications: ["Notifications", "Check important marketplace updates."],
+            profile: ["My Profile", "View and manage your marketplace profile."],
+            reviews: ["Reviews", "View your seller ratings and marketplace reviews."],
+            rules: ["Marketplace Rules", "Read the rules and safety guidelines."]
+        };
+
+        if (titles[section]) {
+            document.getElementById("pageTitle").textContent = titles[section][0];
+            document.getElementById("pageSubtitle").textContent = titles[section][1];
+        }
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    async function loadAnnouncements() {
+        const container = document.getElementById("announcementsList");
+        container.textContent = "Loading announcements...";
+
+        try {
+            const response = await fetch("/api/admin/public-announcements");
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                container.textContent = data.message || "Could not load announcements.";
+                return;
+            }
+
+            container.replaceChildren();
+
+            if (!Array.isArray(data.announcements) || data.announcements.length === 0) {
+                container.textContent = "There are no announcements yet.";
+                return;
+            }
+
+            data.announcements.forEach((announcement) => {
+                const card = document.createElement("article");
+                card.style.cssText = "padding:16px;margin:12px 0;background:#f4f7fb;border-radius:10px;border-left:4px solid #4a76a8";
+
+                const heading = document.createElement("h3");
+                heading.textContent = announcement.title || "Announcement";
+
+                const type = document.createElement("p");
+                type.style.cssText = "color:#4a76a8;font-size:13px;margin:8px 0";
+                type.textContent = (announcement.type || "update") + " · " + (announcement.created_at || "");
+
+                const message = document.createElement("p");
+                message.style.cssText = "line-height:1.6;white-space:pre-wrap";
+                message.textContent = announcement.message || "";
+
+                card.append(heading, type, message);
+                container.appendChild(card);
+            });
+        } catch (error) {
+            console.error("Could not load announcements:", error);
+            container.textContent = "Could not connect to load announcements.";
+        }
+    }
+
+    async function loadNotifications() {
+        const container = document.getElementById("notificationsList");
+        container.replaceChildren();
+
+        const note = document.createElement("p");
+        note.style.cssText = "line-height:1.6;color:#555";
+        note.textContent = "Your announcement updates appear here. Personal notifications, such as new private messages or account activity, have not been connected yet.";
+        container.appendChild(note);
+
+        try {
+            const response = await fetch("/api/admin/public-announcements");
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                note.textContent = data.message || "Could not load updates.";
+                return;
+            }
+
+            if (Array.isArray(data.announcements) && data.announcements.length > 0) {
+                container.replaceChildren();
+
+                const heading = document.createElement("h3");
+                heading.textContent = "Recent Updates";
+                heading.style.marginBottom = "12px";
+                container.appendChild(heading);
+
+                data.announcements.forEach((announcement) => {
+                    const item = document.createElement("div");
+                    item.style.cssText = "padding:12px 0;border-bottom:1px solid #e5e7eb";
+
+                    const title = document.createElement("strong");
+                    title.textContent = announcement.title || "Announcement";
+
+                    const message = document.createElement("p");
+                    message.style.cssText = "margin-top:6px;line-height:1.5;color:#555";
+                    message.textContent = announcement.message || "";
+
+                    item.append(title, message);
+                    container.appendChild(item);
+                });
+            } else {
+                note.textContent = "No new announcements or updates.";
+            }
+        } catch (error) {
+            console.error("Could not load notifications:", error);
+            note.textContent = "Could not connect to load updates.";
+        }
+    }
+
+    async function loadDashboard() {
+
+        try {
+
+            const response = await fetch("/api/me");
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+
+                window.location.href = "/login.html";
+
+                return;
+
+            }
+
+            document.getElementById("username").textContent =
+                data.user.username;
+
+            document.getElementById("topUsername").textContent =
+                data.user.username;
+
+            document.getElementById("loading").style.display =
+                "none";
+
+            document.getElementById("dashboardContent").style.display =
+                "grid";
+
+        } catch (error) {
+
+            console.error(error);
+
+            window.location.href = "/login.html";
+
+        }
+
+    }
+
+
+    async function loadAdvertisingCredits() {
+
+        try {
+
+            const balanceResponse =
+                await fetch("/api/advertising/credits");
+
+            const balanceData =
+                await balanceResponse.json();
+
+            if (balanceResponse.ok && balanceData.success) {
+
+                document.getElementById(
+                    "advertisingCreditBalance"
+                ).textContent =
+                    balanceData.credits + " credits";
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Could not load advertising credits:",
+                error
+            );
+
+        }
+
+
+        try {
+
+            const packagesResponse =
+                await fetch("/api/advertising/packages");
+
+            const packagesData =
+                await packagesResponse.json();
+
+            const packagesContainer =
+                document.getElementById(
+                    "advertisingPackages"
+                );
+
+            const packageSelect =
+                document.getElementById(
+                    "advertisingPackageSelect"
+                );
+
+            if (
+                !packagesResponse.ok ||
+                !packagesData.success
+            ) {
+
+                packagesContainer.innerHTML =
+                    "<p>Could not load advertising packages.</p>";
+
+                return;
+
+            }
+
+            packagesContainer.innerHTML = "";
+
+            packageSelect.innerHTML =
+                '<option value="">Choose a package</option>';
+
+
+            packagesData.packages.forEach((pkg) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "dashboard-card";
+
+                card.style.margin = "0";
+
+                card.innerHTML =
+                    "<h3>" +
+                    pkg.name +
+                    "</h3>" +
+
+                    "<p style='font-size:24px;font-weight:700;'>" +
+                    "KSh " +
+                    pkg.price +
+                    "</p>" +
+
+                    "<p>" +
+                    pkg.credits +
+                    " advertising credit" +
+                    (pkg.credits === 1 ? "" : "s") +
+                    "</p>" +
+
+                    "<button " +
+                    "class='btn orange' " +
+                    "type='button' " +
+                    "onclick='selectAdvertisingPackage(" +
+                    pkg.id +
+                    ")'>" +
+                    "Choose Package" +
+                    "</button>";
+
+                packagesContainer.appendChild(card);
+
+
+                const option =
+                    document.createElement("option");
+
+                option.value = pkg.id;
+
+                option.textContent =
+                    pkg.name +
+                    " — KSh " +
+                    pkg.price +
+                    " (" +
+                    pkg.credits +
+                    " credits)";
+
+                packageSelect.appendChild(option);
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Could not load advertising packages:",
+                error
+            );
+
+        }
+
+
+        loadAdvertisingPaymentHistory();
+
+    }
+
+
+    function selectAdvertisingPackage(packageId) {
+
+        const select =
+            document.getElementById(
+                "advertisingPackageSelect"
+            );
+
+        select.value = packageId;
+
+        select.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+
+
+    async function submitAdvertisingPayment() {
+
+        const fullName =
+            document.getElementById(
+                "advertisingFullName"
+            ).value.trim();
+
+        const whatsappNumber =
+            document.getElementById(
+                "advertisingWhatsapp"
+            ).value.trim();
+
+        const email =
+            document.getElementById(
+                "advertisingEmail"
+            ).value.trim();
+
+        const packageId =
+            document.getElementById(
+                "advertisingPackageSelect"
+            ).value;
+
+        const transactionCode =
+            document.getElementById(
+                "advertisingTransactionCode"
+            ).value.trim();
+
+        const screenshotInput =
+            document.getElementById(
+                "advertisingScreenshot"
+            );
+
+        const message =
+            document.getElementById(
+                "advertisingPaymentMessage"
+            );
+
+
+        if (!fullName) {
+            message.textContent =
+                "Please enter your full name.";
+            return;
+        }
+
+
+        if (!whatsappNumber) {
+            message.textContent =
+                "Please enter your WhatsApp number.";
+            return;
+        }
+
+
+        if (!email) {
+            message.textContent =
+                "Please enter your email address.";
+            return;
+        }
+
+
+        if (!packageId) {
+            message.textContent =
+                "Please choose an advertising package.";
+            return;
+        }
+
+
+        if (!transactionCode) {
+            message.textContent =
+                "Please enter your M-Pesa transaction code.";
+            return;
+        }
+
+
+        if (!screenshotInput.files.length) {
+            message.textContent =
+                "Please upload your payment screenshot.";
+            return;
+        }
+
+
+        const formData = new FormData();
+
+        formData.append(
+            "full_name",
+            fullName
+        );
+
+        formData.append(
+            "whatsapp_number",
+            whatsappNumber
+        );
+
+        formData.append(
+            "email",
+            email
+        );
+
+        formData.append(
+            "package_id",
+            Number(packageId)
+        );
+
+        formData.append(
+            "transaction_code",
+            transactionCode
+        );
+
+        formData.append(
+            "screenshot",
+            screenshotInput.files[0]
+        );
+
+
+        message.textContent =
+            "Submitting payment...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/advertising/payments",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                message.textContent =
+                    data.message ||
+                    "Could not submit payment.";
+
+                return;
+
+            }
+
+
+            message.textContent =
+                data.message;
+
+
+            document.getElementById(
+                "advertisingFullName"
+            ).value = "";
+
+            document.getElementById(
+                "advertisingWhatsapp"
+            ).value = "";
+
+            document.getElementById(
+                "advertisingEmail"
+            ).value = "";
+
+            document.getElementById(
+                "advertisingTransactionCode"
+            ).value = "";
+
+            document.getElementById(
+                "advertisingPackageSelect"
+            ).value = "";
+
+            document.getElementById(
+                "advertisingScreenshot"
+            ).value = "";
+
+
+            loadAdvertisingPaymentHistory();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                "Could not connect to the server.";
+
+        }
+    }
+
+    async function loadAdvertisingPaymentHistory() {
+
+        const container =
+            document.getElementById(
+                "advertisingPaymentHistory"
+            );
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/advertising/payments"
+                );
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                container.innerHTML =
+                    "<p>Could not load payment history.</p>";
+
+                return;
+
+            }
+
+
+            if (!data.payments.length) {
+
+                container.innerHTML =
+                    "<p>No advertising payments submitted yet.</p>";
+
+                return;
+
+            }
+
+
+            container.innerHTML = "";
+
+
+            data.payments.forEach((payment) => {
+
+                const item =
+                    document.createElement("div");
+
+                item.style.padding = "15px";
+
+                item.style.marginBottom = "10px";
+
+                item.style.borderRadius = "10px";
+
+                item.style.background = "#f5f5f5";
+
+
+                item.innerHTML =
+                    "<strong>" +
+                    payment.package_name +
+                    "</strong>" +
+
+                    "<br>KSh " +
+                    payment.amount +
+
+                    "<br>" +
+                    payment.credits +
+                    " credits" +
+
+                    "<br>Transaction: " +
+                    payment.transaction_code +
+
+                    "<br>Status: " +
+                    payment.status +
+
+                    "<br>Date: " +
+                    payment.created_at;
+
+
+                container.appendChild(item);
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Could not load payment history:",
+                error
+            );
+
+            container.innerHTML =
+                "<p>Could not connect to the server.</p>";
+
+        }
+
+    }
+
+
+    async function logout() {
+
+        try {
+
+            const response = await fetch("/api/logout", {
+                method: "POST"
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+
+                window.location.href = "/login.html";
+
+            } else {
+
+                alert("Could not log out. Please try again.");
+
+            }
+
+        } catch (error) {
+
+            alert("Could not connect to the server.");
+
+        }
+
+    }
+
+
+    document
+        .getElementById("sidebarLogoutButton")
+        .addEventListener("click", logout);
+
+
+    loadAdvertisingCredits();
+
+    loadDashboard();
+    loadAnnouncements();
+    loadNotifications();
+
+</script>
+
+</body>
+</html>

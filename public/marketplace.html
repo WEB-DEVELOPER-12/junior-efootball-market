@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Marketplace | Junior eFootball Market</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #222;
+    }
+
+    header {
+        background: #4a76a8;
+        color: white;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .brand {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    nav a:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1150px;
+        margin: auto;
+        padding: 30px 20px;
+    }
+
+    .top-section {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+    }
+
+    .top-section h1 {
+        margin: 0 0 8px;
+        color: #333;
+    }
+
+    .top-section p {
+        color: #666;
+        margin: 0 0 20px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 12px;
+    }
+
+    .controls input,
+    .controls select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 14px;
+        background: #f9f9f9;
+    }
+
+    .controls input:focus,
+    .controls select:focus {
+        outline: none;
+        border-color: #4a76a8;
+        background: white;
+    }
+
+    .listings {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .listing-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .listing-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .listing-image {
+        height: 170px;
+        background: #e9eef5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        color: #4a76a8;
+    }
+
+    .listing-content {
+        padding: 18px;
+    }
+
+    .category {
+        display: inline-block;
+        background: #e8f0fa;
+        color: #4a76a8;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .listing-content h3 {
+        margin: 0 0 8px;
+        color: #333;
+    }
+
+    .description {
+        color: #666;
+        font-size: 13px;
+        line-height: 1.5;
+        min-height: 40px;
+    }
+
+    .price {
+        color: #28a745;
+        font-size: 20px;
+        font-weight: bold;
+        margin: 12px 0;
+    }
+
+    .seller {
+        color: #777;
+        font-size: 12px;
+        margin-bottom: 14px;
+    }
+
+    .view-button {
+        width: 100%;
+        border: none;
+        background: #28a745;
+        color: white;
+        padding: 11px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .view-button:hover {
+        background: #218838;
+    }
+
+    .empty {
+        background: white;
+        padding: 40px 20px;
+        border-radius: 12px;
+        text-align: center;
+        color: #666;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+        display: none;
+    }
+
+    .loading {
+        text-align: center;
+        color: #666;
+        padding: 30px;
+    }
+
+    @media (max-width: 850px) {
+        .listings {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .controls {
+            grid-template-columns: 1fr;
+        }
+
+        .listings {
+            grid-template-columns: 1fr;
+        }
+
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .container {
+            padding: 20px 14px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<header>
+
+    <div class="brand">
+        ⚽ Junior eFootball Market
+    </div>
+
+    <nav>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/marketplace.html">Marketplace</a>
+        <a href="/login.html">Login</a>
+    </nav>
+
+</header>
+
+<main class="container">
+
+    <section class="top-section">
+
+        <h1>Marketplace</h1>
+
+        <p>
+            Browse eFootball gaming advertisements from marketplace users.
+        </p>
+
+        <div class="controls">
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search advertisements..."
+            >
+
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="Players">Players</option>
+                <option value="Teams">Teams</option>
+                <option value="Gaming Services">Gaming Services</option>
+                <option value="Other">Other</option>
+            </select>
+
+        </div>
+
+    </section>
+
+    <div class="loading" id="loading">
+        Loading advertisements...
+    </div>
+
+    <section class="listings" id="listings"></section>
+
+    <div class="empty" id="empty">
+        <h3>No advertisements found</h3>
+        <p>
+            There are currently no advertisements matching your search.
+        </p>
+    </div>
+
+</main>
+
+<script>
+    const listingsContainer = document.getElementById("listings");
+    const loading = document.getElementById("loading");
+    const empty = document.getElementById("empty");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    let allListings = [];
+
+    async function loadListings() {
+        loading.style.display = "block";
+        listingsContainer.innerHTML = "";
+        empty.style.display = "none";
+
+        try {
+            const response = await fetch("/api/listings");
+
+            if (!response.ok) {
+                throw new Error("Could not load listings.");
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                allListings = data.listings || [];
+                displayListings(allListings);
+            } else {
+                throw new Error(
+                    data.message || "Could not load listings."
+                );
+            }
+
+        } catch (error) {
+            console.error("Marketplace error:", error);
+
+            loading.textContent =
+                "Could not load advertisements. Please try again.";
+        } finally {
+            if (allListings.length > 0) {
+                loading.style.display = "none";
+            }
+        }
+    }
+
+    function displayListings(listings) {
+        loading.style.display = "none";
+        listingsContainer.innerHTML = "";
+
+        if (listings.length === 0) {
+            empty.style.display = "block";
+            return;
+        }
+
+        empty.style.display = "none";
+
+        listings.forEach((listing) => {
+
+            const card = document.createElement("article");
+            card.className = "listing-card";
+
+            const imageArea = document.createElement("div");
+            imageArea.className = "listing-image";
+            imageArea.textContent = "⚽";
+
+            const content = document.createElement("div");
+            content.className = "listing-content";
+
+            const category = document.createElement("span");
+            category.className = "category";
+            category.textContent = listing.category;
+
+            const title = document.createElement("h3");
+            title.textContent = listing.title;
+
+            const description = document.createElement("p");
+            description.className = "description";
+            description.textContent = listing.description;
+
+            const price = document.createElement("div");
+            price.className = "price";
+            price.textContent =
+                "KSh " + Number(listing.price).toLocaleString();
+
+            const seller = document.createElement("div");
+            seller.className = "seller";
+            seller.textContent =
+                "Seller: " + listing.username;
+
+            const button = document.createElement("button");
+            button.className = "view-button";
+            button.textContent = "View Advertisement";
+
+            button.addEventListener("click", () => {
+                window.location.href =
+                    "/listing.html?id=" + listing.id;
+            });
+
+            content.appendChild(category);
+            content.appendChild(title);
+            content.appendChild(description);
+            content.appendChild(price);
+            content.appendChild(seller);
+            content.appendChild(button);
+
+            card.appendChild(imageArea);
+            card.appendChild(content);
+
+            listingsContainer.appendChild(card);
+        });
+    }
+
+    function filterListings() {
+        const search = searchInput.value.toLowerCase().trim();
+        const category = categoryFilter.value;
+
+        const filtered = allListings.filter((listing) => {
+
+            const matchesSearch =
+                listing.title.toLowerCase().includes(search) ||
+                listing.description.toLowerCase().includes(search) ||
+                listing.username.toLowerCase().includes(search);
+
+            const matchesCategory =
+                !category ||
+                listing.category === category;
+
+            return matchesSearch && matchesCategory;
+        });
+
+        displayListings(filtered);
+    }
+
+    searchInput.addEventListener("input", filterListings);
+    categoryFilter.addEventListener("change", filterListings);
+
+    loadListings();
+</script>
+```
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Junior eFootball Market</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #4a76a8;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .login-form {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 34px;
+            margin-bottom: 2px;
+        }
+
+        h2 {
+            color: #333;
+            margin: 0;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 13px;
+            text-align: center;
+            margin: 0 0 12px;
+            line-height: 1.5;
+        }
+
+        label {
+            font-size: 12px;
+            color: #444;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            position: absolute;
+            left: 12px;
+            font-size: 15px;
+            z-index: 1;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 10px 11px 38px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #28a745;
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.08);
+        }
+
+        .forgot-link {
+            text-align: right;
+            margin-top: -4px;
+            font-size: 12px;
+        }
+
+        .forgot-link a {
+            color: #4a76a8;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .forgot-link a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background-color: #8acb99;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .message.success {
+            display: block;
+            background: #e8f7ed;
+            color: #176b2c;
+        }
+
+        .message.error {
+            display: block;
+            background: #fdeaea;
+            color: #a12626;
+        }
+
+        .register-link {
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin: 8px 0 0;
+        }
+
+        .register-link a {
+            color: #28a745;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .safety {
+            text-align: center;
+            color: #777;
+            font-size: 10px;
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .login-form {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<form class="login-form" id="loginForm">
+
+    <div class="logo">⚽</div>
+
+    <h2>Welcome Back</h2>
+
+    <p class="subtitle">
+        Login to your Junior eFootball Market account.
+    </p>
+
+    <label for="login">Username or email*</label>
+
+    <div class="input-container">
+        <span class="icon">👤</span>
+
+        <input
+            type="text"
+            id="login"
+            name="login"
+            placeholder="Username or email"
+            required
+        >
+    </div>
+
+    <label for="password">Password*</label>
+
+    <div class="input-container">
+        <span class="icon">🔒</span>
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Your password"
+            required
+        >
+    </div>
+
+    <div class="forgot-link">
+        <a href="/forgot-password.html">Forgot Password?</a>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <button type="submit" id="loginButton">
+        Login
+    </button>
+
+    <p class="register-link">
+        Don't have an account?
+        <a href="/" id="registerLink">Create Account</a>
+    </p>
+
+    <p class="safety">
+        Never share your eFootball/Konami password,
+        M-Pesa PIN, OTP or other sensitive credentials.
+    </p>
+
+</form>
+
+<script>
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        message.className = "message";
+        message.textContent = "";
+
+        const login = document.getElementById("login").value.trim();
+        const password = document.getElementById("password").value;
+
+        if (!login || !password) {
+            message.className = "message error";
+            message.textContent =
+                "Please enter your username/email and password.";
+            return;
+        }
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Logging in...";
+
+        try {
+            const response = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    login,
+                    password
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                message.className = "message success";
+                message.textContent =
+                    "Login successful! Opening your dashboard...";
+
+                setTimeout(() => {
+                    if (data.user && data.user.role === "admin") {
+                        window.location.href = "/admin.html";
+                    } else {
+                        window.location.href = "/dashboard.html";
+                    }
+                }, 800);
+
+                return;
+            }
+
+            message.className = "message error";
+            message.textContent =
+                data.message || "Login failed.";
+
+        } catch (error) {
+            console.error("Login error:", error);
+
+            message.className = "message error";
+            message.textContent =
+                "Could not connect to the server. Please try again.";
+
+        } finally {
+            loginButton.disabled = false;
+            loginButton.textContent = "Login";
+        }
+    });
+
+    document.getElementById("registerLink").addEventListener(
+        "click",
+        (event) => {
+            event.preventDefault();
+            window.location.href = "/";
+        }
+    );
+</script>
+
+</body>
+</html>

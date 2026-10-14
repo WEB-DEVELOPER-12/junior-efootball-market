@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Profile | Junior eFootball Market</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            margin: 0;
+            color: #222;
+        }
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px;
+            text-align: center;
+        }
+        main { max-width: 600px; margin: 25px auto; padding: 20px; }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0001;
+        }
+        label { display: block; margin-top: 16px; font-weight: bold; }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font: inherit;
+        }
+        input[readonly] { background: #f3f4f6; }
+        button, .btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 12px 18px;
+            background: #087f5b;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        button:disabled { opacity: .6; cursor: wait; }
+        #status { margin-top: 15px; overflow-wrap: anywhere; }
+        .error { color: #b42318; }
+        .success { color: #087f5b; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>👤 My Profile</h1>
+    <p>Junior eFootball Market</p>
+</header>
+
+<main>
+    <div class="card">
+        <h2>Your Account</h2>
+        <p>View your account details and update your profile information.</p>
+
+        <p id="status" role="status">Loading your profile...</p>
+
+        <form id="profileForm">
+            <label for="username">Username</label>
+            <input id="username" autocomplete="username" readonly>
+
+            <label for="email">Email</label>
+            <input id="email" type="email" autocomplete="email" readonly>
+
+            <label for="profileInfo">About You</label>
+            <textarea id="profileInfo" rows="4" maxlength="500"
+                placeholder="Tell other members a little about yourself"></textarea>
+
+            <button id="saveButton" type="submit">Save Profile</button>
+        </form>
+
+        <a class="btn" href="/dashboard.html">Back to Dashboard</a>
+    </div>
+</main>
+
+<script>
+const statusBox = document.getElementById("status");
+const form = document.getElementById("profileForm");
+const saveButton = document.getElementById("saveButton");
+
+function showStatus(message, type = "") {
+    statusBox.textContent = message;
+    statusBox.className = type;
+}
+
+async function loadProfile() {
+    try {
+        const response = await fetch("/api/me", {
+            credentials: "same-origin"
+        });
+
+        if (response.status === 401) {
+            window.location.href = "/login.html";
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok || data.success === false) {
+            throw new Error(data.message || "Could not load your account.");
+        }
+
+        const user = data.user || data;
+
+        document.getElementById("username").value = user.username || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("profileInfo").value = user.profile_info || "";
+
+        if (!user.email) {
+            showStatus(
+                "Your profile loaded, but email is missing from your login session. Log out and log in again after the server email fix.",
+                "error"
+            );
+        } else {
+            showStatus("Profile loaded successfully.", "success");
+        }
+    } catch (error) {
+        showStatus(error.message || "Unable to load your profile.", "error");
+    }
+}
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const profileInfo = document.getElementById("profileInfo").value.trim();
+
+    saveButton.disabled = true;
+    showStatus("Saving profile...");
+
+    try {
+        const response = await fetch("/api/profile", {
+            method: "PUT",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ profile_info: profileInfo })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "/login.html";
+            return;
+        }
+
+        if (!response.ok || data.success === false) {
+            throw new Error(
+                data.message ||
+                "Profile saving is not yet supported by the server."
+            );
+        }
+
+        showStatus(data.message || "Profile saved successfully.", "success");
+    } catch (error) {
+        showStatus(
+            error.message || "Could not save your profile. Please try again.",
+            "error"
+        );
+    } finally {
+        saveButton.disabled = false;
+    }
+});
+
+loadProfile();
+</script>
+</body>
+</html>

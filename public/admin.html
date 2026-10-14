@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Junior eFootball Market</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172033;
+        }
+
+        .topbar {
+            background: linear-gradient(135deg, #0757d9, #003b9b);
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 15px rgba(0,0,0,.15);
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .admin-badge {
+            background: rgba(255,255,255,.16);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 235px;
+            background: #0f172a;
+            color: white;
+            padding: 20px 12px;
+        }
+
+        .sidebar h3 {
+            padding: 10px 12px 18px;
+            color: #93c5fd;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: #cbd5e1;
+            padding: 13px 14px;
+            border-radius: 9px;
+            text-align: left;
+            cursor: pointer;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .main {
+            flex: 1;
+            padding: 25px;
+            overflow-x: hidden;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #64748b;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(15,23,42,.07);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-icon {
+            font-size: 25px;
+        }
+
+        .stat-card h3 {
+            font-size: 27px;
+            margin: 10px 0 4px;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(15,23,42,.05);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .panel-header h2 {
+            font-size: 19px;
+        }
+
+        .search {
+            padding: 10px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            width: 230px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .suspended,
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .banned,
+        .removed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .reviewed,
+        .resolved {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .dismissed {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .action-btn {
+            border: 0;
+            border-radius: 7px;
+            padding: 7px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .green {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            padding: 25px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .logout {
+            background: #dc2626;
+            color: white;
+            border: 0;
+            padding: 9px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1050px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding: 10px;
+            }
+
+            .sidebar h3 {
+                display: none;
+            }
+
+            .nav-btn {
+                min-width: 120px;
+                margin-right: 5px;
+                margin-bottom: 0;
+            }
+
+            .main {
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 15px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .admin-badge {
+                display: none;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+            .panel-header {
+                align-items: stretch;
+                flex-direction: column;
+            }
+        }
+    
+/* ANNOUNCEMENTS BEAUTIFUL THEME */
+#announcements {
+    color: #172554;
+}
+#announcements .page-title {
+    padding: 26px;
+    margin-bottom: 24px;
+    border-radius: 20px;
+    color: white;
+    background: linear-gradient(120deg, #1d4ed8, #7c3aed, #9333ea);
+    box-shadow: 0 12px 28px rgba(79, 70, 229, .2);
+}
+#announcements .page-title h1 {
+    margin: 0 0 8px;
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 800;
+}
+#announcements .page-title p {
+    margin: 0;
+    color: #ede9fe;
+}
+#announcements .panel {
+    padding: 24px;
+    margin-bottom: 22px;
+    border: 1px solid #e0e7ff;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #ffffff, #f8faff);
+    box-shadow: 0 8px 24px rgba(30, 64, 175, .07);
+}
+#announcements .panel h2 {
+    color: #312e81;
+    font-size: 21px;
+    font-weight: 800;
+}
+#announcements #announcementForm {
+    gap: 10px !important;
+}
+#announcements #announcementForm label {
+    margin-top: 8px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 700;
+}
+#announcements #announcementTitle,
+#announcements #announcementMessage,
+#announcements #announcementType {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #c7d2fe;
+    border-radius: 12px;
+    background: #fff;
+    color: #172554;
+    font: inherit;
+    padding: 13px 15px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+#announcements #announcementTitle:focus,
+#announcements #announcementMessage:focus,
+#announcements #announcementType:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, .13);
+}
+#announcements #announcementMessage {
+    resize: vertical;
+    min-height: 130px;
+    line-height: 1.6;
+}
+#announcements button {
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 17px;
+    background: linear-gradient(120deg, #2563eb, #7c3aed);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .18s, box-shadow .18s, opacity .18s;
+}
+#announcements button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(79, 70, 229, .2);
+}
+#announcements button:disabled {
+    cursor: wait;
+    opacity: .6;
+}
+#announcements #announcementCancelBtn,
+#announcements .logout {
+    background: #475569;
+}
+#announcements #announcementsList article {
+    border: 1px solid #dbeafe !important;
+    border-left: 5px solid #6366f1 !important;
+    border-radius: 15px !important;
+    padding: 20px !important;
+    margin-top: 16px !important;
+    background: linear-gradient(135deg, #fff, #f5f7ff);
+    box-shadow: 0 5px 16px rgba(30, 64, 175, .06);
+    overflow-wrap: anywhere;
+}
+#announcements #announcementsList article h3 {
+    color: #312e81;
+    font-size: 18px;
+    margin: 0;
+}
+#announcements #announcementsList article p {
+    line-height: 1.7;
+}
+#announcements #announcementsList article p:first-of-type {
+    color: #64748b;
+    font-size: 12px !important;
+}
+#announcements #announcementsList article div {
+    gap: 9px !important;
+}
+#announcements #announcementsList article button:last-child {
+    background: #dc2626;
+}
+#announcements .empty,
+#announcements .loading {
+    padding: 22px;
+    border: 1px dashed #c7d2fe;
+    border-radius: 12px;
+    color: #64748b;
+    text-align: center;
+    background: #f8faff;
+}
+@media (max-width: 600px) {
+    #announcements .page-title,
+    #announcements .panel {
+        padding: 18px;
+    }
+    #announcements #announcementForm > div {
+        display: flex;
+        flex-direction: column;
+    }
+    #announcements #announcementForm button {
+        width: 100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">⚽ Junior eFootball Market</div>
+
+    <div style="display:flex;align-items:center;gap:12px;">
+        <span class="admin-badge">🛡️ ADMIN</span>
+        <span id="adminName">Loading...</span>
+        <button class="logout" id="logoutBtn">Logout</button>
+    </div>
+</header>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h3>Administration</h3>
+
+        <button class="nav-btn active" data-section="overview">
+            📊 Overview
+        </button>
+
+        <button class="nav-btn" data-section="users">
+            👥 Users
+        </button>
+
+        <button class="nav-btn" data-section="listings">
+            🏷️ Listings
+        </button>
+
+        <button class="nav-btn" data-section="reports">
+            🚩 Reports
+        </button>
+
+        <button class="nav-btn" data-section="advertising-payments">
+            💳 Advertising Payments
+        </button>
+
+        <button class="nav-btn" data-section="announcements">
+            📢 Announcements
+        </button>
+    </aside>
+
+    <main class="main">
+
+        <div id="message" class="message"></div>
+
+        <!-- OVERVIEW -->
+
+        <section id="overview" class="section">
+
+            <div class="page-title">
+                <h1>Admin Dashboard</h1>
+                <p>Manage Junior eFootball Market safely and efficiently.</p>
+            </div>
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <h3 id="totalUsers">0</h3>
+                    <p>Total Users</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🟢</div>
+                    <h3 id="activeUsers">0</h3>
+                    <p>Active Users</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🏷️</div>
+                    <h3 id="totalListings">0</h3>
+                    <p>Total Listings</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <h3 id="activeListings">0</h3>
+                    <p>Active Listings</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🚩</div>
+                    <h3 id="pendingReports">0</h3>
+                    <p>Pending Reports</p>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <h2>Admin Controls</h2>
+                <p style="color:#64748b;margin-top:8px;">
+                    Use the menu to manage users, advertisements and reports.
+                    Administrative actions are protected by backend role checks.
+                </p>
+            </div>
+
+        </section>
+
+        <!-- ANNOUNCEMENTS -->
+
+        <section id="announcements" class="section hidden">
+            <div class="page-title">
+                <h1>Announcements</h1>
+                <p>Create and manage updates displayed on user dashboards.</p>
+            </div>
+
+            <div class="panel">
+                <h2 id="announcementFormHeading">Create Announcement</h2>
+
+                <form id="announcementForm" style="display:grid;gap:12px;margin-top:16px;">
+                    <label for="announcementTitle">Title</label>
+                    <input id="announcementTitle" class="search"
+                        type="text" maxlength="120"
+                        placeholder="Announcement title" required>
+
+                    <label for="announcementMessage">Message</label>
+                    <textarea id="announcementMessage" rows="5"
+                        maxlength="5000"
+                        placeholder="Write your announcement..."
+                        required style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;"></textarea>
+
+                    <label for="announcementType">Announcement type</label>
+                    <select id="announcementType"
+                        style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;">
+                        <option value="general">General</option>
+                        <option value="important">Important</option>
+                        <option value="update">Update</option>
+                        <option value="warning">Warning</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <button type="submit" id="announcementSubmitBtn">Publish Announcement</button>
+                        <button type="button" id="announcementCancelBtn"
+                            class="logout" hidden>Cancel Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="panel" style="margin-top:20px;">
+                <div class="panel-header">
+                    <h2>All Announcements</h2>
+                    <button type="button" id="refreshAnnouncementsBtn">Refresh</button>
+                </div>
+                <div id="announcementsList" aria-live="polite">
+                    <p class="loading">Loading announcements...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- USERS -->
+
+        <section id="users" class="section hidden">
+
+            <div class="page-title">
+                <h1>Users</h1>
+                <p>View and manage marketplace accounts.</p>
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>All Users</h2>
+                    <input
+                        class="search"
+                        id="userSearch"
+                        type="search"
+                        placeholder="Search users..."
+                    >
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="usersTable">
+                            <tr>
+                                <td colspan="7" class="loading">
+                                    Loading users...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- LISTINGS -->
+
+        <section id="listings" class="section hidden">
+
+            <div class="page-title">
+                <h1>Listings</h1>
+                <p>Moderate advertisements posted to the marketplace.</p>
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Marketplace Listings</h2>
+
+                    <input
+                        class="search"
+                        id="listingSearch"
+                        type="search"
+                        placeholder="Search listings..."
+                    >
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Seller</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="listingsTable">
+                            <tr>
+                                <td colspan="8" class="loading">
+                                    Loading listings...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ADVERTISING PAYMENTS -->
+
+        <section id="advertising-payments" class="section hidden">
+
+            <div class="welcome">
+                <h1>Advertising Payments</h1>
+                <p>
+                    Review seller payments and manage advertising credits.
+                </p>
+            </div>
+
+            <div class="card">
+
+                <h2>💳 Payment Submissions</h2>
+
+                <div
+                    id="advertisingPaymentsList"
+                    style="overflow-x:auto; margin-top:20px;"
+                >
+                    Loading advertising payments...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- REPORTS -->
+
+        <section id="reports" class="section hidden">
+
+            <div class="page-title">
+                <h1>Reports</h1>
+                <p>Review reports submitted by marketplace users.</p>
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Reports</h2>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Reporter</th>
+                                <th>Reported User</th>
+                                <th>Listing</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="reportsTable">
+                            <tr>
+                                <td colspan="8" class="loading">
+                                    Loading reports...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<script>
+    let users = [];
+    let listings = [];
+    let reports = [];
+
+    const messageBox = document.getElementById("message");
+
+    function showMessage(text, type = "success") {
+        messageBox.textContent = text;
+        messageBox.className = "message show " + type;
+
+        setTimeout(() => {
+            messageBox.className = "message";
+        }, 3500);
+    }
+
+    function escapeHtml(value) {
+        if (value === null || value === undefined) return "";
+
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    async function api(url, options = {}) {
+        const response = await fetch(url, {
+            credentials: "same-origin",
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(options.headers || {})
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Request failed.");
+        }
+
+        return data;
+    }
+
+    async function checkAdmin() {
+        try {
+            const data = await api("/api/admin/me");
+
+            document.getElementById("adminName").textContent =
+                data.admin.username;
+
+        } catch (error) {
+            window.location.href = "/login.html";
+        }
+    }
+
+    async function loadStats() {
+        try {
+            const data = await api("/api/admin/stats");
+
+            document.getElementById("totalUsers").textContent =
+                data.stats.users;
+
+            document.getElementById("activeUsers").textContent =
+                data.stats.activeUsers;
+
+            document.getElementById("totalListings").textContent =
+                data.stats.listings;
+
+            document.getElementById("activeListings").textContent =
+                data.stats.activeListings;
+
+            document.getElementById("pendingReports").textContent =
+                data.stats.pendingReports;
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function loadUsers() {
+        try {
+            const data = await api("/api/admin/users");
+            users = data.users;
+            renderUsers(users);
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    function renderUsers(list) {
+        const tbody = document.getElementById("usersTable");
+
+        if (!list.length) {
+            tbody.innerHTML =
+                '<tr><td colspan="7" class="empty">No users found.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = list.map(user => `
+            <tr>
+                <td>${user.id}</td>
+                <td><strong>${escapeHtml(user.username)}</strong></td>
+                <td>${escapeHtml(user.email)}</td>
+                <td>${escapeHtml(user.role)}</td>
+                <td>
+                    <span class="status ${escapeHtml(user.status)}">
+                        ${escapeHtml(user.status)}
+                    </span>
+                </td>
+                <td>${formatDate(user.created_at)}</td>
+                <td>
+                    ${
+                        user.role === "admin"
+                        ? "<small>Protected</small>"
+                        : `
+                            <button class="action-btn green"
+                                onclick="changeUserStatus(${user.id}, 'active')">
+                                Activate
+                            </button>
+
+                            <button class="action-btn yellow"
+                                onclick="changeUserStatus(${user.id}, 'suspended')">
+                                Suspend
+                            </button>
+
+                            <button class="action-btn red"
+                                onclick="changeUserStatus(${user.id}, 'banned')">
+                                Ban
+                            </button>
+                        `
+                    }
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    async function changeUserStatus(id, status) {
+        if (!confirm(`Change this user's status to ${status}?`)) {
+            return;
+        }
+
+        try {
+            const data = await api(
+                `/api/admin/users/${id}/status`,
+                {
+                    method: "PATCH",
+                    body: JSON.stringify({ status })
+                }
+            );
+
+            showMessage(data.message);
+            await loadUsers();
+            await loadStats();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function loadListings() {
+        try {
+            const data = await api("/api/admin/listings");
+            listings = data.listings;
+            renderListings(listings);
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    function renderListings(list) {
+        const tbody = document.getElementById("listingsTable");
+
+        if (!list.length) {
+            tbody.innerHTML =
+                '<tr><td colspan="8" class="empty">No listings found.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = list.map(item => `
+            <tr>
+                <td>${item.id}</td>
+
+                <td>
+                    <strong>${escapeHtml(item.title)}</strong>
+                </td>
+
+                <td>${escapeHtml(item.username || "Unknown")}</td>
+
+                <td>${escapeHtml(item.category || "Other")}</td>
+
+                <td>
+                    KSh ${Number(item.price || 0).toLocaleString()}
+                </td>
+
+                <td>
+                    <span class="status ${escapeHtml(item.status)}">
+                        ${escapeHtml(item.status)}
+                    </span>
+                </td>
+
+                <td>${formatDate(item.created_at)}</td>
+
+                <td>
+                    <button class="action-btn green"
+                        onclick="changeListingStatus(${item.id}, 'active')">
+                        Approve
+                    </button>
+
+                    <button class="action-btn yellow"
+                        onclick="changeListingStatus(${item.id}, 'pending')">
+                        Pending
+                    </button>
+
+                    <button class="action-btn red"
+                        onclick="deleteListing(${item.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    async function changeListingStatus(id, status) {
+        try {
+            const data = await api(
+                `/api/admin/listings/${id}/status`,
+                {
+                    method: "PATCH",
+                    body: JSON.stringify({ status })
+                }
+            );
+
+            showMessage(data.message);
+            await loadListings();
+            await loadStats();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function deleteListing(id) {
+        if (!confirm("Permanently delete this advertisement?")) {
+            return;
+        }
+
+        try {
+            const data = await api(
+                `/api/admin/listings/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            showMessage(data.message);
+            await loadListings();
+            await loadStats();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function loadReports() {
+        try {
+            const data = await api("/api/admin/reports");
+            reports = data.reports;
+            renderReports(reports);
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    function renderReports(list) {
+        const tbody = document.getElementById("reportsTable");
+
+        if (!list.length) {
+            tbody.innerHTML =
+                '<tr><td colspan="8" class="empty">No reports found.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = list.map(report => `
+            <tr>
+                <td>${report.id}</td>
+
+                <td>
+                    ${escapeHtml(report.reporter_username || "Unknown")}
+                </td>
+
+                <td>
+                    ${escapeHtml(report.reported_username || "Unknown")}
+                </td>
+
+                <td>
+                    ${report.listing_id || "—"}
+                </td>
+
+                <td>
+                    ${escapeHtml(report.reason)}
+                </td>
+
+                <td>
+                    <span class="status ${escapeHtml(report.status)}">
+                        ${escapeHtml(report.status)}
+                    </span>
+                </td>
+
+                <td>${formatDate(report.created_at)}</td>
+
+                <td>
+                    <button class="action-btn blue"
+                        onclick="changeReportStatus(${report.id}, 'reviewed')">
+                        Review
+                    </button>
+
+                    <button class="action-btn green"
+                        onclick="changeReportStatus(${report.id}, 'resolved')">
+                        Resolve
+                    </button>
+
+                    <button class="action-btn yellow"
+                        onclick="changeReportStatus(${report.id}, 'dismissed')">
+                        Dismiss
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+    }
+
+    async function changeReportStatus(id, status) {
+        try {
+            const data = await api(
+                `/api/admin/reports/${id}/status`,
+                {
+                    method: "PATCH",
+                    body: JSON.stringify({ status })
+                }
+            );
+
+            showMessage(data.message);
+            await loadReports();
+            await loadStats();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function loadAdvertisingPayments() {
+        try {
+            const data = await api("/api/admin/advertising-payments");
+            renderAdvertisingPayments(data.payments || []);
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    function renderAdvertisingPayments(list) {
+        const container =
+            document.getElementById("advertisingPaymentsList");
+
+        if (!container) {
+            return;
+        }
+
+        if (!list.length) {
+            container.innerHTML =
+                '<div class="empty">No advertising payment submissions found.</div>';
+            return;
+        }
+
+        container.innerHTML = `
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Seller</th>
+                            <th>Package</th>
+                            <th>Amount</th>
+                            <th>Credits</th>
+                            <th>Transaction</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        ${list.map(payment => `
+                            <tr>
+                                <td>${payment.id}</td>
+
+                                <td>
+                                    <strong>
+                                        ${escapeHtml(
+                                            payment.full_name ||
+                                            payment.username ||
+                                            "Unknown"
+                                        )}
+                                    </strong>
+
+                                    <br>
+
+                                    <small>
+                                        ${escapeHtml(
+                                            payment.email || ""
+                                        )}
+                                    </small>
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        payment.package_name || "Unknown"
+                                    )}
+                                </td>
+
+                                <td>
+                                    KSh ${Number(
+                                        payment.amount || 0
+                                    ).toLocaleString()}
+                                </td>
+
+                                <td>
+                                    ${Number(
+                                        payment.credits || 0
+                                    )}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        ${escapeHtml(
+                                            payment.transaction_code || "—"
+                                        )}
+                                    </strong>
+
+                                    ${
+                                        payment.screenshot
+                                        ? `
+                                            <br>
+                                            <button
+                                                class="action-btn blue"
+                                                onclick="viewPaymentScreenshot('${escapeHtml(payment.screenshot)}')">
+                                                🖼️ View Screenshot
+                                            </button>
+                                        `
+                                        : `
+                                            <br>
+                                            <small>No screenshot</small>
+                                        `
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="status ${escapeHtml(
+                                        payment.status || ""
+                                    )}">
+                                        ${escapeHtml(
+                                            payment.status || "pending"
+                                        )}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    ${formatDate(payment.created_at)}
+                                </td>
+
+                                <td>
+                                    ${
+                                        payment.status === "pending"
+                                        ? `
+                                            <button
+                                                class="action-btn green"
+                                                onclick="approveAdvertisingPayment(${payment.id})">
+                                                Approve
+                                            </button>
+
+                                            <button
+                                                class="action-btn red"
+                                                onclick="rejectAdvertisingPayment(${payment.id})">
+                                                Reject
+                                            </button>
+                                        `
+                                        : `
+                                            <small>
+                                                ${
+                                                    payment.status ===
+                                                    "approved"
+                                                    ? "Approved"
+                                                    : "Rejected"
+                                                }
+                                            </small>
+                                        `
+                                    }
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function viewPaymentScreenshot(path) {
+        if (!path) {
+            showMessage("No payment screenshot is available.", "error");
+            return;
+        }
+
+        window.open(path, "_blank", "noopener,noreferrer");
+    }
+
+    async function approveAdvertisingPayment(id) {
+        if (!confirm(
+            "Approve this payment and add the advertising credits?"
+        )) {
+            return;
+        }
+
+        try {
+            const data = await api(
+                `/api/admin/advertising-payments/${id}/approve`,
+                {
+                    method: "PATCH"
+                }
+            );
+
+            showMessage(data.message);
+            await loadAdvertisingPayments();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function rejectAdvertisingPayment(id) {
+        if (!confirm(
+            "Reject this advertising payment?"
+        )) {
+            return;
+        }
+
+        try {
+            const data = await api(
+                `/api/admin/advertising-payments/${id}/reject`,
+                {
+                    method: "PATCH"
+                }
+            );
+
+            showMessage(data.message);
+            await loadAdvertisingPayments();
+
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    let adminAnnouncements = [];
+    let editingAnnouncementId = null;
+
+    async function loadAnnouncements() {
+        const container = document.getElementById("announcementsList");
+        container.textContent = "Loading announcements...";
+
+        try {
+            const data = await api("/api/admin/announcements");
+            adminAnnouncements = data.announcements || [];
+            renderAnnouncements();
+        } catch (error) {
+            container.textContent = error.message;
+            showMessage(error.message, "error");
+        }
+    }
+
+    function renderAnnouncements() {
+        const container = document.getElementById("announcementsList");
+        container.replaceChildren();
+
+        if (!adminAnnouncements.length) {
+            const empty = document.createElement("p");
+            empty.className = "empty";
+            empty.textContent = "No announcements yet. Create one using the form above.";
+            container.appendChild(empty);
+            return;
+        }
+
+        adminAnnouncements.forEach(item => {
+            const card = document.createElement("article");
+            card.style.cssText = "border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-top:12px;";
+
+            const heading = document.createElement("h3");
+            heading.textContent = item.title;
+            card.appendChild(heading);
+
+            const meta = document.createElement("p");
+            meta.style.cssText = "color:#64748b;font-size:13px;margin:8px 0;";
+            meta.textContent =
+                "Type: " + item.type +
+                " · Status: " + (Number(item.is_active) === 1 ? "Active" : "Inactive") +
+                " · By: " + (item.created_by_username || "Admin") +
+                " · " + (item.created_at || "");
+            card.appendChild(meta);
+
+            const message = document.createElement("p");
+            message.style.cssText = "white-space:pre-wrap;margin:12px 0;";
+            message.textContent = item.message;
+            card.appendChild(message);
+
+            const actions = document.createElement("div");
+            actions.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;";
+
+            const editBtn = document.createElement("button");
+            editBtn.type = "button";
+            editBtn.textContent = "Edit";
+            editBtn.addEventListener("click", () => beginAnnouncementEdit(item.id));
+            actions.appendChild(editBtn);
+
+            const statusBtn = document.createElement("button");
+            statusBtn.type = "button";
+            statusBtn.textContent = Number(item.is_active) === 1 ? "Deactivate" : "Activate";
+            statusBtn.addEventListener("click", () => changeAnnouncementStatus(item));
+            actions.appendChild(statusBtn);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.type = "button";
+            deleteBtn.textContent = "Delete";
+            deleteBtn.className = "logout";
+            deleteBtn.addEventListener("click", () => deleteAnnouncement(item));
+            actions.appendChild(deleteBtn);
+
+            card.appendChild(actions);
+            container.appendChild(card);
+        });
+    }
+
+    function beginAnnouncementEdit(id) {
+        const item = adminAnnouncements.find(announcement => announcement.id === id);
+        if (!item) return;
+
+        editingAnnouncementId = item.id;
+        document.getElementById("announcementTitle").value = item.title;
+        document.getElementById("announcementMessage").value = item.message;
+        document.getElementById("announcementType").value = item.type;
+        document.getElementById("announcementFormHeading").textContent = "Edit Announcement";
+        document.getElementById("announcementSubmitBtn").textContent = "Save Changes";
+        document.getElementById("announcementCancelBtn").hidden = false;
+        document.getElementById("announcementTitle").focus();
+    }
+
+    function resetAnnouncementForm() {
+        editingAnnouncementId = null;
+        document.getElementById("announcementForm").reset();
+        document.getElementById("announcementFormHeading").textContent = "Create Announcement";
+        document.getElementById("announcementSubmitBtn").textContent = "Publish Announcement";
+        document.getElementById("announcementCancelBtn").hidden = true;
+    }
+
+    document.getElementById("announcementForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const title = document.getElementById("announcementTitle").value.trim();
+        const message = document.getElementById("announcementMessage").value.trim();
+        const type = document.getElementById("announcementType").value;
+
+        if (!title || !message) {
+            showMessage("Enter both a title and a message.", "error");
+            return;
+        }
+
+        const submitBtn = document.getElementById("announcementSubmitBtn");
+        submitBtn.disabled = true;
+
+        try {
+            const editing = editingAnnouncementId !== null;
+            const endpoint = editing
+                ? "/api/admin/announcements/" + encodeURIComponent(editingAnnouncementId)
+                : "/api/admin/announcements";
+
+            const data = await api(endpoint, {
+                method: editing ? "PUT" : "POST",
+                body: JSON.stringify({ title, message, type })
+            });
+
+            showMessage(data.message || "Announcement saved.");
+            resetAnnouncementForm();
+            await loadAnnouncements();
+            await loadStats();
+        } catch (error) {
+            showMessage(error.message, "error");
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+
+    document.getElementById("announcementCancelBtn")
+        .addEventListener("click", resetAnnouncementForm);
+
+    document.getElementById("refreshAnnouncementsBtn")
+        .addEventListener("click", loadAnnouncements);
+
+    async function changeAnnouncementStatus(item) {
+        const isActive = Number(item.is_active) === 1 ? 0 : 1;
+
+        try {
+            const data = await api(
+                "/api/admin/announcements/" + encodeURIComponent(item.id) + "/status",
+                {
+                    method: "PATCH",
+                    body: JSON.stringify({ is_active: isActive })
+                }
+            );
+
+            showMessage(data.message || "Announcement status updated.");
+            await loadAnnouncements();
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    async function deleteAnnouncement(item) {
+        if (!window.confirm('Delete the announcement "' + item.title + '"? This cannot be undone.')) {
+            return;
+        }
+
+        try {
+            const data = await api(
+                "/api/admin/announcements/" + encodeURIComponent(item.id),
+                { method: "DELETE" }
+            );
+
+            if (editingAnnouncementId === item.id) resetAnnouncementForm();
+            showMessage(data.message || "Announcement deleted.");
+            await loadAnnouncements();
+            await loadStats();
+        } catch (error) {
+            showMessage(error.message, "error");
+        }
+    }
+
+    function formatDate(value) {
+        if (!value) return "—";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return escapeHtml(value);
+        }
+
+        return date.toLocaleDateString();
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+        button.addEventListener("click", async () => {
+
+            document.querySelectorAll(".nav-btn")
+                .forEach(btn => btn.classList.remove("active"));
+
+            button.classList.add("active");
+
+            document.querySelectorAll(".section")
+                .forEach(section => section.classList.add("hidden"));
+
+            const section =
+                document.getElementById(button.dataset.section);
+
+            section.classList.remove("hidden");
+
+            if (button.dataset.section === "users") {
+                await loadUsers();
+            }
+
+            if (button.dataset.section === "listings") {
+                await loadListings();
+            }
+
+            if (button.dataset.section === "reports") {
+                await loadReports();
+            }
+
+            if (button.dataset.section === "advertising-payments") {
+                await loadAdvertisingPayments();
+            }
+
+            if (button.dataset.section === "announcements") {
+                await loadAnnouncements();
+            }
+        });
+    });
+
+    document.getElementById("userSearch")
+        .addEventListener("input", event => {
+            const query = event.target.value.toLowerCase();
+
+            renderUsers(
+                users.filter(user =>
+                    user.username.toLowerCase().includes(query) ||
+                    user.email.toLowerCase().includes(query)
+                )
+            );
+        });
+
+    document.getElementById("listingSearch")
+        .addEventListener("input", event => {
+            const query = event.target.value.toLowerCase();
+
+            renderListings(
+                listings.filter(item =>
+                    String(item.title || "")
+                        .toLowerCase()
+                        .includes(query) ||
+                    String(item.username || "")
+                        .toLowerCase()
+                        .includes(query)
+                )
+            );
+        });
+
+    document.getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+            try {
+                await fetch("/api/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+            } finally {
+                window.location.href = "/login.html";
+            }
+        });
+
+    (async function init() {
+        await checkAdmin();
+        await loadStats();
+    })();
+</script>
+
+</body>
+</html>

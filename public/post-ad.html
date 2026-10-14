@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Advertisement - Junior eFootball Market</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        header {
+            background: #0757d5;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            width: min(900px, 94%);
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccd5e0;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .image-box {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed #b8c5d6;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        #imagePreview {
+            display: none;
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px auto 0;
+            border-radius: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #0757d5;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0648ae;
+        }
+
+        .btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success {
+            display: block;
+            background: #dff7e8;
+            color: #126b36;
+        }
+
+        .error {
+            display: block;
+            background: #ffe1e1;
+            color: #9b1c1c;
+        }
+
+        .safety {
+            margin-top: 25px;
+            padding: 18px;
+            background: #fff8df;
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 650px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <strong>⚽ Junior eFootball Market</strong>
+    <a href="/dashboard.html">Dashboard</a>
+</header>
+
+<div class="container">
+    <div class="card">
+
+        <h1>Post Advertisement</h1>
+        <p>Create an advertisement for the marketplace.</p>
+
+        <form id="postAdForm">
+
+            <label for="title">Advertisement Title *</label>
+            <input
+                type="text"
+                id="title"
+                placeholder="Example: Strong eFootball Account"
+                required
+            >
+
+            <label for="description">Description *</label>
+            <textarea
+                id="description"
+                placeholder="Describe the account or service..."
+                required
+            ></textarea>
+
+            <div class="grid">
+
+                <div>
+                    <label for="category">Category *</label>
+                    <select id="category" required>
+                        <option value="">Select category</option>
+                        <option value="Players">Players</option>
+                        <option value="Teams">Teams</option>
+                        <option value="Gaming Services">Gaming Services</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="price">Price (KSh) *</label>
+                    <input
+                        type="number"
+                        id="price"
+                        min="0"
+                        placeholder="1000"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="grid">
+
+                <div>
+                    <label for="collective_strength">Collective Strength</label>
+                    <input
+                        type="number"
+                        id="collective_strength"
+                        placeholder="3100"
+                    >
+                </div>
+
+                <div>
+                    <label for="team_name">Team Name</label>
+                    <input
+                        type="text"
+                        id="team_name"
+                        placeholder="Example: Real Madrid"
+                    >
+                </div>
+
+            </div>
+
+            <div class="grid">
+
+                <div>
+                    <label for="player_count">Player Count</label>
+                    <input
+                        type="number"
+                        id="player_count"
+                        min="0"
+                        placeholder="50"
+                    >
+                </div>
+
+                <div>
+                    <label for="featured_player">Featured Player</label>
+                    <input
+                        type="text"
+                        id="featured_player"
+                        placeholder="Example: Messi"
+                    >
+                </div>
+
+            </div>
+
+            <div class="grid">
+
+                <div>
+                    <label for="account_level">Account Level</label>
+                    <input
+                        type="text"
+                        id="account_level"
+                        placeholder="Example: Division 1"
+                    >
+                </div>
+
+                <div>
+                    <label for="platform">Platform</label>
+                    <select id="platform">
+                        <option value="">Select platform</option>
+                        <option value="Android">Android</option>
+                        <option value="iOS">iOS</option>
+                        <option value="PlayStation">PlayStation</option>
+                        <option value="Xbox">Xbox</option>
+                        <option value="PC">PC</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="image-box">
+                <label for="image">Advertisement Image</label>
+
+                <input
+                    type="file"
+                    id="image"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+                <img id="imagePreview" alt="Image preview">
+
+                <p>JPG, PNG or WebP • Maximum 5 MB</p>
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <button type="submit" class="btn" id="publishButton">
+                Publish Advertisement
+            </button>
+
+        </form>
+
+        <div class="safety">
+            <strong>🛡️ Safety Reminder</strong><br>
+            Never include or request an eFootball/Konami password,
+            M-Pesa PIN, OTP, email password, or other private credentials.
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("postAdForm");
+    const imageInput = document.getElementById("image");
+    const imagePreview = document.getElementById("imagePreview");
+    const message = document.getElementById("message");
+    const publishButton = document.getElementById("publishButton");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "message " + type;
+    }
+
+    imageInput.addEventListener("change", function () {
+        const file = this.files[0];
+
+        if (!file) {
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        const allowed = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowed.includes(file.type)) {
+            showMessage("Please choose a JPG, PNG or WebP image.", "error");
+            this.value = "";
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            showMessage("Image must be 5 MB or smaller.", "error");
+            this.value = "";
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            imagePreview.src = event.target.result;
+            imagePreview.style.display = "block";
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    async function checkLogin() {
+        try {
+            const response = await fetch("/api/me", {
+                credentials: "same-origin"
+            });
+
+            const data = await response.json();
+
+            if (!data.user) {
+                window.location.href = "/login.html";
+            }
+
+        } catch (error) {
+            window.location.href = "/login.html";
+        }
+    }
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        showMessage("", "");
+        publishButton.disabled = true;
+        publishButton.textContent = "Publishing...";
+
+        try {
+            const formData = new FormData();
+
+            formData.append(
+                "title",
+                document.getElementById("title").value.trim()
+            );
+
+            formData.append(
+                "description",
+                document.getElementById("description").value.trim()
+            );
+
+            formData.append(
+                "category",
+                document.getElementById("category").value
+            );
+
+            formData.append(
+                "price",
+                document.getElementById("price").value
+            );
+
+            formData.append(
+                "collective_strength",
+                document.getElementById("collective_strength").value
+            );
+
+            formData.append(
+                "team_name",
+                document.getElementById("team_name").value.trim()
+            );
+
+            formData.append(
+                "player_count",
+                document.getElementById("player_count").value
+            );
+
+            formData.append(
+                "featured_player",
+                document.getElementById("featured_player").value.trim()
+            );
+
+            formData.append(
+                "account_level",
+                document.getElementById("account_level").value.trim()
+            );
+
+            formData.append(
+                "platform",
+                document.getElementById("platform").value
+            );
+
+            if (imageInput.files[0]) {
+                formData.append("image", imageInput.files[0]);
+            }
+
+            const response = await fetch("/api/listings", {
+                method: "POST",
+                body: formData,
+                credentials: "same-origin"
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.message || "Could not create advertisement."
+                );
+            }
+
+            showMessage(
+                "Advertisement published successfully!",
+                "success"
+            );
+
+            setTimeout(() => {
+                window.location.href = "/marketplace.html";
+            }, 1000);
+
+        } catch (error) {
+            showMessage(
+                error.message || "Could not connect to the server.",
+                "error"
+            );
+
+        } finally {
+            publishButton.disabled = false;
+            publishButton.textContent = "Publish Advertisement";
+        }
+    });
+
+    checkLogin();
+</script>
+
+</body>
+</html>
+ 

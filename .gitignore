@@ -1,0 +1,53 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Local databases and SQLite files
+data/*.db
+data/*.db-*
+data/*.sqlite
+data/*.sqlite-*
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Logs
+npm-debug.log*
+
+# Protect all database files and backups
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+
+# Protect uploaded user files
+public/uploads/
+
+# Local backup files and folders
+*-backup*/
+*backup*.js
+*.backup
+*.before-fix
+*.before-*
+*.working-copy
+
+# Local backup files and folders
+*-backup*/
+*backup*.js
+*.backup
+*.before-fix
+*.before-*
+*.working-copy
+*maintenance-backup*
+*payment-working-copy*
+*safe-backup*
+
+# Backup copies inside public
+public/*backup*
